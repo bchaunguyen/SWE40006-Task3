@@ -1,0 +1,7 @@
+/workspaces/SWE40006-Task3/bin/Release/net8.0/publish/WebApp
+/workspaces/SWE40006-Task3/bin/Release/net8.0/publish/appsettings.Development.json
+/workspaces/SWE40006-Task3/bin/Release/net8.0/publish/appsettings.json
+/workspaces/SWE40006-Task3/bin/Release/net8.0/publish/WebApp.dll
+/workspaces/SWE40006-Task3/bin/Release/net8.0/publish/WebApp.deps.json
+/workspaces/SWE40006-Task3/bin/Release/net8.0/publish/WebApp.runtimeconfig.json
+/workspaces/SWE40006-Task3/bin/Release/net8.0/publish/WebApp.pdb
