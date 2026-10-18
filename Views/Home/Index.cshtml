@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "Word Bomb";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <main class="game">
+        <h1>Word Bomb</h1>
+        <p class="subtitle">Cross the minefield and uncover the secret word.</p>
+
+        <div class="status">
+            <div><span class="label">Hint:</span><b id="hint"></b></div>
+            <div class="lives" id="lives"></div>
+        </div>
+
+        <div class="slots" id="slots"></div>
+        <div class="board" id="board"></div>
+        <div class="message" id="msg"></div>
+
+        <div class="controls">
+            <input id="guess" placeholder="Guess the word..." autocomplete="off" />
+            <button class="btn" onclick="guess()">Guess</button>
+            <button class="btn secondary" onclick="newGame()">New Game</button>
+        </div>
+
+        <p class="rules">
+            Start in the top row and move one tile at a time: up, down, left or right.<br />
+            Numbers show how many mines touch a tile (including diagonals).<br />
+            Tiles on the hidden path reveal a letter of the secret word.<br />
+            Hitting a mine or guessing wrong costs a life. You have 3 lives.
+        </p>
+    </main>
+
+    <script>let state = null;
+
+    async function post(url, body) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: body ? JSON.stringify(body) : null
+      });
+      state = await res.json();
+      render();
+    }
+
+    const newGame = () => post("/Home/New");
+    const move = (r, c) => post("/Home/Reveal", { id: state.id, r, c });
+    const guess = () => {
+      const input = document.getElementById("guess");
+      if (input.value.trim()) post("/Home/Guess", { id: state.id, word: input.value });
+      input.value = "";
+    };
+
+    function render() {
+      const s = state;
+      document.getElementById("hint").textContent = `${s.hint} (${s.length} letters)`;
+      document.getElementById("lives").textContent =
+        s.lives > 0 ? "❤️".repeat(s.lives) : "💀";
+
+      document.getElementById("slots").innerHTML = s.slots
+        .map(x => `<div class="slot ${x ? "filled" : ""}">${x}</div>`)
+        .join("");
+
+      const board = document.getElementById("board");
+      board.style.gridTemplateColumns = `repeat(${s.cols}, var(--cell-size))`;
+      board.innerHTML = "";
+
+      for (let r = 0; r < s.rows; r++) {
+        for (let c = 0; c < s.cols; c++) {
+          const b = document.createElement("button");
+          b.className = "cell";
+          const rev = s.revealed.find(x => x.r === r && x.c === c);
+          if (rev) {
+            b.classList.add("open");
+            b.innerHTML = (rev.letter ? `<span class="ltr">${rev.letter}</span>` : "") +
+                          `<span class="num">${rev.n}</span>`;
+          } else if (s.exploded.some(x => x.r === r && x.c === c)) {
+            b.classList.add("boom");
+            b.textContent = "💥";
+          }
+          if (s.pos && s.pos.r === r && s.pos.c === c) b.classList.add("here");
+          b.disabled = s.over;
+          b.onclick = () => move(r, c);
+          board.appendChild(b);
+        }
+      }
+
+      const msg = document.getElementById("msg");
+      msg.className = "message";
+      if (s.over) {
+        msg.classList.add(s.won ? "win" : "lose");
+        msg.textContent = (s.won ? "🎉 You win! " : "Game over. ") + `The word was ${s.word}.`;
+      } else {
+        msg.textContent = s.message;
+      }
+    }
+
+    document.getElementById("guess").addEventListener("keydown", e => {
+      if (e.key === "Enter") guess();
+    });
+    newGame();</script>
+</body>
+</html>
