@@ -1,0 +1,265 @@
+:root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --tile: #475569;
+    --tile-hover: #64748b;
+    --tile-open: #e2e8f0;
+    --text: #f1f5f9;
+    --text-dark: #0f172a;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --number: #2563eb;
+    /* Ô tự co giãn theo màn hình, từ 52px đến 100px */
+    --cell-size: clamp(52px, 8vw, 100px);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    text-align: center;
+}
+
+.game {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+}
+
+    .game h1 {
+        margin: 0 0 4px;
+        font-size: 3rem;
+        letter-spacing: 1px;
+    }
+
+.subtitle {
+    margin: 0 0 24px;
+    color: #94a3b8;
+    font-size: 1.1rem;
+}
+
+/* ---------- Status bar ---------- */
+.status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 24px;
+    background: var(--panel);
+    border-radius: 16px;
+    font-size: 1.3rem;
+    text-align: left;
+}
+
+    .status .label {
+        color: #94a3b8;
+        margin-right: 6px;
+    }
+
+    .status .lives {
+        font-size: 1.8rem;
+        white-space: nowrap;
+    }
+
+/* ---------- Word slots ---------- */
+.slots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 24px 0 12px;
+}
+
+.slot {
+    width: 56px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 5px solid var(--tile);
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    transition: border-color 0.2s;
+}
+
+    .slot.filled {
+        border-color: var(--accent);
+    }
+
+/* ---------- Board ---------- */
+.board {
+    display: inline-grid;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 20px;
+    background: var(--panel);
+    border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.cell {
+    position: relative;
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 0;
+    border-radius: 14px;
+    background: var(--tile);
+    color: var(--text);
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.15s;
+}
+
+    .cell:hover:not(:disabled):not(.open) {
+        background: var(--tile-hover);
+        transform: translateY(-2px);
+    }
+
+    .cell:disabled {
+        cursor: default;
+    }
+
+    .cell.open {
+        background: var(--tile-open);
+        color: var(--text-dark);
+        cursor: default;
+    }
+
+    .cell.boom {
+        background: var(--danger);
+        animation: shake 0.35s;
+    }
+
+    .cell.here {
+        outline: 4px solid var(--accent);
+        outline-offset: 1px;
+    }
+
+    .cell .ltr {
+        font-size: calc(var(--cell-size) * 0.5);
+        font-weight: 800;
+    }
+
+    .cell .num {
+        position: absolute;
+        right: 9px;
+        bottom: 5px;
+        font-size: calc(var(--cell-size) * 0.26);
+        font-weight: 700;
+        color: var(--number);
+    }
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-4px);
+    }
+
+    75% {
+        transform: translateX(4px);
+    }
+}
+
+/* ---------- Message ---------- */
+.message {
+    min-height: 40px;
+    margin: 4px 0 16px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+    .message.win {
+        color: var(--success);
+    }
+
+    .message.lose {
+        color: var(--danger);
+    }
+
+/* ---------- Controls ---------- */
+.controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+    .controls input {
+        flex: 1 1 220px;
+        max-width: 340px;
+        padding: 14px 18px;
+        border: 2px solid var(--tile);
+        border-radius: 12px;
+        background: var(--panel);
+        color: var(--text);
+        font-size: 1.2rem;
+        text-transform: uppercase;
+    }
+
+        .controls input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+.btn {
+    padding: 14px 26px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--accent);
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter 0.15s;
+}
+
+    .btn:hover {
+        filter: brightness(1.1);
+    }
+
+    .btn.secondary {
+        background: var(--tile);
+        color: var(--text);
+    }
+
+.rules {
+    margin-top: 28px;
+    color: #94a3b8;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 480px) {
+    .game h1 {
+        font-size: 2.2rem;
+    }
+
+    .slot {
+        width: 36px;
+        height: 48px;
+        font-size: 1.6rem;
+    }
+
+    .status {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .board {
+        gap: 6px;
+        padding: 12px;
+    }
+}

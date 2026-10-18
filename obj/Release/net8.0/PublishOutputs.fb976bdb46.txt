@@ -1,0 +1,7 @@
+/Users/chau/Documents/SWE40006/WebApp/bin/Release/net8.0/publish/WebApp
+/Users/chau/Documents/SWE40006/WebApp/bin/Release/net8.0/publish/appsettings.Development.json
+/Users/chau/Documents/SWE40006/WebApp/bin/Release/net8.0/publish/appsettings.json
+/Users/chau/Documents/SWE40006/WebApp/bin/Release/net8.0/publish/WebApp.dll
+/Users/chau/Documents/SWE40006/WebApp/bin/Release/net8.0/publish/WebApp.deps.json
+/Users/chau/Documents/SWE40006/WebApp/bin/Release/net8.0/publish/WebApp.runtimeconfig.json
+/Users/chau/Documents/SWE40006/WebApp/bin/Release/net8.0/publish/WebApp.pdb
